@@ -1,10 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
 import os
+import requests  # Nueva herramienta para conectar con Telegram
 
 app = Flask(__name__)
 
+# ========================================================
+# 🤖 CONFIGURACIÓN DE TU BOT DE TELEGRAM
+# Pega aquí tus datos reales respetando las comillas
+TELEGRAM_TOKEN = "8971605974:AAGHKxTujNGUvZW-I6ON2-p-zK-m71b_A7A"
+TELEGRAM_CHAT_ID = "6447478231"
+# ========================================================
+
 # Base de datos temporal en memoria para guardar las citas generadas
 bibliografia = []
+
+def enviar_alerta_telegram():
+    """Función lógica que envía un mensaje a tu Telegram"""
+    try:
+        mensaje = "🚀 ¡Aviso de Ofimática! Alguien acaba de entrar a tu página web del Generador APA."
+        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+        payload = {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": mensaje
+        }
+        # Python hace la petición oculta a Telegram
+        requests.post(url, json=payload, timeout=5)
+    except Exception as e:
+        print(f"Error al enviar a Telegram: {e}")
 
 def generar_apa_libro(autor, anio, titulo):
     """Función lógica que automatiza el formato APA 7ma edición"""
@@ -17,6 +39,9 @@ def generar_apa_libro(autor, anio, titulo):
 
 @app.route('/')
 def index():
+    # 🔔 ¡Aquí está la magia! Cuando alguien entra a la raíz '/',
+    # el sistema primero te manda el mensaje al cel y luego carga la página.
+    enviar_alerta_telegram()
     return render_template('index.html', bibliografia=bibliografia)
 
 @app.route('/generar_cita', methods=['POST'])
