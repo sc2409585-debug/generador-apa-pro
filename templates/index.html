@@ -16,8 +16,6 @@
             </a>
             <ul class="nav-menu">
                 <li><a href="/" class="nav-link active"><i class="fas fa-home"></i> Inicio</a></li>
-                <li><a href="#generador" class="nav-link"><i class="fas fa-tools"></i> Generador</a></li>
-                <li><a href="#citas" class="nav-link"><i class="fas fa-bookmark"></i> Mis Citas</a></li>
                 <li><a href="https://github.com" target="_blank" class="nav-link github-link"><i class="fab fa-github"></i> GitHub</a></li>
             </ul>
         </div>
@@ -26,42 +24,59 @@
     <div class="container">
         
         <header class="main-header">
-            <h1>Generador Automático de Referencias APA</h1>
-            <p class="subtitle">Herramienta digital de ofimática para la organización y exportación de fuentes bibliográficas según la 7ma edición.</p>
+            <h1>Buscador y Generador Automático APA</h1>
+            <p class="subtitle">Escribe el nombre de un libro o tema. Nuestra lógica buscará los datos bibliográficos reales en internet y armará tu formato APA al instante.</p>
         </header>
 
         <main class="web-layout">
-            <section id="generador" class="card">
+            
+            <section class="card">
                 <div class="card-header">
-                    <h2><i class="fas fa-book-open"></i> Datos del Libro</h2>
-                    <p>Introduce la información del documento para procesar la estructura lógica.</p>
+                    <h2><i class="fas fa-search"></i> 1. Buscar Libro en Internet</h2>
+                    <p>Conexión directa con la API de Google Books para recolectar fuentes.</p>
                 </div>
-                <form action="/generar_cita" method="POST" class="form-interactive">
+                <form action="/buscar_libro" method="POST" class="form-interactive">
                     <div class="form-group">
-                        <label for="autor"><i class="fas fa-user-edit"></i> Autor(es)</label>
-                        <input type="text" id="autor" name="autor" placeholder="Ej: Gómez, A. o Pérez, J. & Silva, M." required>
+                        <input type="text" name="query_busqueda" placeholder="Escribe el título del libro, autor o tema a buscar..." required>
                     </div>
-                    <div class="form-group">
-                        <label for="anio"><i class="fas fa-calendar-alt"></i> Año de Publicación</label>
-                        <input type="text" id="anio" name="anio" placeholder="Ej: 2024" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="titulo"><i class="fas fa-heading"></i> Título del Libro</label>
-                        <input type="text" id="titulo" name="titulo" placeholder="Ej: Manual de Ofimática Avanzada" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-cog fa-spin"></i> Generar Cita APA</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar Libro Real</button>
                 </form>
             </section>
 
+            {% if resultados %}
+            <section class="card results-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-book-reader"></i> Resultados Encontrados</h2>
+                    <p>Selecciona el libro correcto para procesar su estructura APA automáticamente.</p>
+                </div>
+                <div class="results-grid">
+                    {% for libro in resultados %}
+                        <div class="result-item">
+                            <h4>{{ libro.titulo }}</h4>
+                            <p><strong><i class="fas fa-user"></i> Autor:</strong> {{ libro.autor }}</p>
+                            <p><strong><i class="fas fa-calendar"></i> Año:</strong> {{ libro.anio }}</p>
+                            
+                            <form action="/generar_cita_automatica" method="POST">
+                                <input type="hidden" name="autor" value="{{ libro.autor }}">
+                                <input type="hidden" name="anio" value="{{ libro.anio }}">
+                                <input type="hidden" name="titulo" value="{{ libro.titulo }}">
+                                <button type="submit" class="btn-select"><i class="fas fa-plus-circle"></i> Convertir a Cita APA</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
             <section id="citas" class="card">
                 <div class="card-header">
-                    <h2><i class="fas fa-list-check"></i> Tus Citas Generadas</h2>
-                    <p>Lista organizada y formateada lista para tus documentos académicos.</p>
+                    <h2><i class="fas fa-list-check"></i> 2. Tu Bibliografía Formateada</h2>
+                    <p>Lista final organizada alfabéticamente lista para exportar.</p>
                 </div>
                 
                 <div class="actions-wrapper">
                     <a href="/exportar_word" class="btn btn-success"><i class="fas fa-file-word"></i> Exportar a Word (.doc)</a>
-                    <a href="/limpiar_bibliografia" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Limpiar Todo</a>
+                    <a href="/limpiar_todo" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Limpiar Todo</a>
                 </div>
                 
                 <ul class="lista-citas">
@@ -73,7 +88,7 @@
                     {% else %}
                         <div class="no-citas-box">
                             <i class="fas fa-folder-open empty-icon"></i>
-                            <p>Aún no has generado ninguna cita. El archivador está vacío.</p>
+                            <p>Aún no hay citas en tu lista. Realiza una búsqueda arriba.</p>
                         </div>
                     {% endfor %}
                 </ul>
@@ -83,8 +98,8 @@
 
     <footer class="main-footer">
         <div class="footer-content">
-            <p>&copy; 2026 - Proyecto de Ofimática Avanzada</p>
-            <p class="credits">Desarrollado por: <strong>Tu Nombre Aquí</strong> | Municipalidad de Presidencia</p>
+            <p>&copy; 2026 - Proyecto de Ofimática Avanzada Automatizada</p>
+            <p class="credits">Desarrollado con Conexión a API Pública | Municipalidad de Presidencia</p>
         </div>
     </footer>
 
