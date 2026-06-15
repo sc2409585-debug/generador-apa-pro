@@ -1,0 +1,321 @@
+/* CONSISTENCIA DE DISEÑO Y PALETA DE COLORES (Máximo 3-4 colores) */
+:root {
+    --primary: #0f172a;      /* Azul Oscuro Ejecutivo (Máximo Contraste) */
+    --secondary: #2563eb;    /* Azul Tecnológico (Enlaces e Iconos) */
+    --success: #16a34a;      /* Verde Word para exportaciones */
+    --danger: #dc2626;       /* Rojo Alerta para limpieza */
+    --bg-page: #f8fafc;      /* Fondo gris claro ultra limpio */
+    --surface: #ffffff;      /* Superficie blanca para tarjetas */
+    --text-main: #334155;    /* Texto gris oscuro de alta legibilidad */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding-top: 80px; /* Espacio para que el Navbar fijo no tape el contenido */
+}
+
+/* ==========================================
+   1. BARRA DE NAVEGACIÓN (NAVBAR) REQUERIDA
+   ========================================== */
+.navbar {
+    background-color: var(--primary);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.nav-logo {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-logo span {
+    color: var(--secondary);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff;
+}
+
+.github-link {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.github-link:hover {
+    background-color: var(--secondary);
+}
+
+/* ==========================================
+   2. ESTRUCTURA, USABILIDAD Y DISEÑO LIMPIO
+   ========================================== */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-header h1 {
+    color: var(--primary);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* DISEÑO ORDENADO: TARJETAS (CARDS) */
+.card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.card-header {
+    margin-bottom: 25px;
+}
+
+.card h2 {
+    color: var(--primary);
+    font-size: 1.35rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.card-header p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+/* FORMULARIOS INTUITIVOS Y DE ALTO CONTRASTE */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+label i {
+    color: var(--secondary);
+    margin-right: 4px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* BOTONES OPERATIVOS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--secondary);
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.actions-wrapper {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.btn-success { background-color: var(--success); color: white; }
+.btn-success:hover { background-color: #15803d; }
+
+.btn-danger { background-color: #fef2f2; color: var(--danger); border: 1px solid #fee2e2; }
+.btn-danger:hover { background-color: var(--danger); color: white; }
+
+/* LISTA DE CITAS ELEGANTES */
+.lista-citas {
+    list-style: none;
+}
+
+.lista-citas li {
+    background-color: #f8fafc;
+    border-left: 4px solid var(--secondary);
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+}
+
+.cita-number {
+    background: #e2e8f0;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+.cita-text {
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+.no-citas-box {
+    text-align: center;
+    padding: 30px;
+    color: #94a3b8;
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #cbd5e1;
+}
+
+/* ==========================================
+   3. PIE DE PÁGINA (FOOTER) REQUERIDO
+   ========================================== */
+.main-footer {
+    background-color: var(--primary);
+    color: #94a3b8;
+    padding: 25px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 60px;
+    border-top: 3px solid var(--secondary);
+}
+
+.footer-content p {
+    margin-bottom: 5px;
+}
+
+.credits strong {
+    color: #ffffff;
+}
+
+/* ==========================================
+   4. RESPONSIVIDAD BÁSICA (MENÚ MÓVIL / CELULARES)
+   ========================================== */
+@media (max-width: 600px) {
+    body { padding-top: 130px; } /* Más espacio arriba para el menú colapsado */
+    
+    .nav-container {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .nav-menu {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 4px 8px;
+    }
+    
+    .actions-wrapper {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .main-header h1 {
+        font-size: 1.6rem;
+    }
+}
