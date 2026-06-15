@@ -1,0 +1,107 @@
+:root {
+    --primary: #1a5276;
+    --success: #1e8449;
+    --danger: #922b21;
+    --bg: #f8f9fa;
+    --card-bg: #ffffff;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 0;
+    color: #2c3e50;
+}
+
+header {
+    background-color: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 2.5rem 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 { margin: 0; font-size: 2.2rem; }
+header p { margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 1.1rem; }
+
+.container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid var(--primary);
+}
+
+h2 { padding-bottom: 0.5rem; color: var(--primary); margin-top: 0; }
+
+.vertical-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+input {
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button, .btn-success, .btn-danger {
+    border: none;
+    padding: 0.8rem 1.2rem;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.btn-primary { background-color: var(--primary); }
+.btn-success { background-color: var(--success); }
+.btn-danger { background-color: var(--danger); }
+
+.acciones-bibliografia {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.list li {
+    background: #f2f4f4;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+    border-left: 4px solid var(--primary);
+    font-style: italic;
+}
+
+.empty { color: #7f8c8d; font-style: italic; text-align: center; padding: 2rem 0; }
