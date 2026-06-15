@@ -4,71 +4,65 @@ import requests
 
 app = Flask(__name__)
 
-# ========================================================
-# 🤖 CONFIGURACIÓN DE TU BOT DE TELEGRAM
-TELEGRAM_TOKEN = "8971605974:AAGHKxTujNGUvZW-I6ON2-p-zK-m71b_A7A"
-TELEGRAM_CHAT_ID = "6447478231"
-# ========================================================
-
-# Base de datos temporal en memoria para guardar las citas generadas y resultados de búsqueda
+# Base de datos temporal en memoria
 bibliografia = []
 resultados_busqueda = []
-
-def enviar_alerta_telegram(mensaje_texto):
-    """Función que envía un mensaje a tu Telegram"""
-    try:
-        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-        payload = {
-            "chat_id": TELEGRAM_CHAT_ID,
-            "text": f"🚀 [Generador APA Pro]: {mensaje_texto}"
-        }
-        requests.post(url, json=payload, timeout=5)
-    except Exception as e:
-        print(f"Error al enviar a Telegram: {e}")
+mensaje_alerta = ""  # Para avisarte en pantalla si algo falla
 
 @app.route('/')
 def index():
-    # Avisa a Telegram cuando alguien entra a la página principal
-    enviar_alerta_telegram("Alguien ingresó a la plataforma.")
-    return render_template('index.html', bibliografia=bibliografia, resultados=resultados_busqueda)
+    global mensaje_alerta
+    # Guardamos el mensaje en una variable temporal y la limpiamos para la próxima recarga
+    alerta = mensaje_alerta
+    mensaje_alerta = ""
+    return render_template('index.html', bibliografia=bibliografia, resultados=resultados_busqueda, alerta=alerta)
 
 @app.route('/buscar_libro', methods=['POST'])
 def buscar_libro():
     """Busca libros reales usando la API pública de Google Books"""
-    global resultados_busqueda
-    resultados_busqueda.clear() # Limpiar búsquedas anteriores
+    global resultados_busqueda, mensaje_alerta
+    resultados_busqueda.clear() 
     
     query = request.form.get('query_busqueda')
     if query:
-        enviar_alerta_telegram(f"Buscando el libro: '{query}'")
         try:
-            # Petición lógica al servidor de Google Books
-            url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=3"
-            response = requests.get(url, timeout=5).json()
+            # Petición directa a Google Books (Trae los 3 libros más relevantes)
+            url = f"https://www.googleapis.com/books/v1/volumes?q={query.strip()}&maxResults=3"
+            response = requests.get(url, timeout=8)
             
-            # Procesar los resultados encontrados
-            if "items" in response:
-                for item in response["items"]:
-                    volume_info = item.get("volumeInfo", {})
+            if response.status_code == 200:
+                data = response.json()
+                if "items" in data:
+                    for item in data["items"]:
+                        volume_info = item.get("volumeInfo", {})
+                        
+                        # Procesar Autores de forma limpia
+                        autores_list = volume_info.get("authors", ["Autor Desconocido"])
+                        autores = ", ".join(autores_list)
+                        
+                        # Procesar Año de publicación
+                        fecha = volume_info.get("publishedDate", "s.f.")
+                        anio = fecha.split("-")[0] # Extraer solo el año de cuatro dígitos
+                        
+                        # Procesar Título
+                        titulo = volume_info.get("title", "Título Desconocido")
+                        
+                        resultados_busqueda.append({
+                            "autor": autores,
+                            "anio": anio,
+                            "titulo": titulo
+                        })
                     
-                    # Extraer Autores
-                    autores_list = volume_info.get("authors", ["Autor Desconocido"])
-                    autores = ", ".join(autores_list)
-                    
-                    # Extraer Año de publicación
-                    fecha = volume_info.get("publishedDate", "s.f.")
-                    anio = fecha.split("-")[0] # Extrae solo el año si viene la fecha completa
-                    
-                    # Extraer Título
-                    titulo = volume_info.get("title", "Título Desconocido")
-                    
-                    resultados_busqueda.append({
-                        "autor": autores,
-                        "anio": anio,
-                        "titulo": titulo
-                    })
+                    if not resultados_busqueda:
+                        mensaje_alerta = "No se encontraron libros con ese título. Intenta con palabras clave."
+                else:
+                    mensaje_alerta = "Google Books no encontró resultados para esa búsqueda."
+            else:
+                mensaje_alerta = f"Error de conexión con el buscador (Código {response.status_code})."
+                
         except Exception as e:
             print(f"Error en la búsqueda: {e}")
+            mensaje_alerta = "Hubo un problema de conexión. Inténtalo de nuevo."
             
     return redirect(url_for('index'))
 
@@ -80,14 +74,13 @@ def generar_cita_automatica():
     titulo = request.form.get('titulo')
     
     if autor and anio and titulo:
-        # Lógica estricta de formato APA: Autor (Año). Título.
+        # Estructura lógica estricta APA 7ma Edición
         cita_lista = f"{autor.strip()} ({anio.strip()}). {titulo.strip()}."
         
         bibliografia.append({
             "id": len(bibliografia) + 1,
             "texto": cita_lista
         })
-        enviar_alerta_telegram(f"¡Nueva cita APA generada con éxito!")
         
     return redirect(url_for('index'))
 
