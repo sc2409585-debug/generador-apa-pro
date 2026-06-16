@@ -29,11 +29,17 @@
         </header>
 
         <main class="web-layout">
+
+            {% if alerta %}
+                <div style="background-color: #fee2e2; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; text-align: center; border: 1px solid #fecaca;">
+                    <i class="fas fa-exclamation-circle"></i> {{ alerta }}
+                </div>
+            {% endif %}
             
             <section class="card">
                 <div class="card-header">
                     <h2><i class="fas fa-search"></i> 1. Buscar Libro en Internet</h2>
-                    <p>Conexión directa con la API de Google Books para recolectar fuentes.</p>
+                    <p>Conexión directa con la API de Google Books para recolectar fuentes de información reales.</p>
                 </div>
                 <form action="/buscar_libro" method="POST" class="form-interactive">
                     <div class="form-group">
@@ -88,7 +94,7 @@
                     {% else %}
                         <div class="no-citas-box">
                             <i class="fas fa-folder-open empty-icon"></i>
-                            <p>Aún no hay citas en tu lista. Realiza una búsqueda arriba.</p>
+                            <p>Aún no hay citas en tu lista. Realiza una búsqueda en la parte de arriba.</p>
                         </div>
                     {% endfor %}
                 </ul>
@@ -105,3 +111,4 @@
 
 </body>
 </html>
+ 
