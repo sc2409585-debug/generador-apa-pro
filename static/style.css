@@ -15,7 +15,7 @@ body {
     background-color: var(--bg-page);
     color: var(--text-main);
     line-height: 1.6;
-    padding-top: 80px;
+    padding-top: 140px; /* Al subir a 140px, el contenido bajará lo suficiente para no taparse con el menú */
 }
 
 .navbar {
